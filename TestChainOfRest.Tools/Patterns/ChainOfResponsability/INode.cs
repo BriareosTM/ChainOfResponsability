@@ -4,9 +4,9 @@ using System.Text;
 
 namespace TestChainOfRest.Tools.Patterns.ChainOfResponsability
 {
-    public interface IChainNode<TContext>
+    public interface INode<TContext>
     {
-        IChainNode<TContext> Next { set; }
+        INode<TContext> Next { set; }
         void Process(TContext context);
     }
 }

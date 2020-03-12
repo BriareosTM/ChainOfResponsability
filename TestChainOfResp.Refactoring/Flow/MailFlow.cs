@@ -7,25 +7,26 @@ namespace TestChainOfResp.Refactoring.Flow
 {
     public class MailFlow
     {
-        private IChainNode<MailContext> _main;
+        private INode<MailContext> _main;
 
         public MailFlow()
         {
-            _main = new ChainNode<MailContext>(SpamHandler, SpamPredicate)
+            _main = new Node<MailContext>(SpamHandler, SpamPredicate)
             {
-                Next = new ChainNode<MailContext>(SalesHandler, SalesPredicate)
+                Next = new Node<MailContext>(SalesHandler, SalesPredicate)
                 {
-                    Next = new ChainNode<MailContext>(ServiceHandler, ServicePredicate)
+                    Next = new Node<MailContext>(ServiceHandler, ServicePredicate)
                     {
-                        Next = new ChainNode<MailContext>(ManagerHandler, ManagerPredicate)
+                        Next = new Node<MailContext>(ManagerHandler, ManagerPredicate)
                         {
-                            Next = new ChainNode<MailContext>(GeneralHandler, GeneralPredicate)
+                            Next = new Node<MailContext>(GeneralHandler, GeneralPredicate)
                         }
                     }
                 }
             };
         }
 
+        #region Spam
         private bool SpamPredicate(MailContext context)
         {
             return WordPredicate(context, new string[] { "viagra", "pills", "medecines" });
@@ -35,7 +36,9 @@ namespace TestChainOfResp.Refactoring.Flow
         {
             Console.WriteLine("this is a spam mail!!");
         }
+        #endregion
 
+        #region Sales
         private bool SalesPredicate(MailContext context)
         {
             return WordPredicate(context, new string[] { "buy", "purchase" });
@@ -45,7 +48,9 @@ namespace TestChainOfResp.Refactoring.Flow
         {
             Console.WriteLine("Email handled by sales department");
         }
+        #region Spam
 
+        #region Manager
         private bool ManagerPredicate(MailContext context)
         {
             return WordPredicate(context, new string[] { "complain", "bad" });
@@ -55,7 +60,9 @@ namespace TestChainOfResp.Refactoring.Flow
         {
             Console.WriteLine("Email handled by manager");
         }
+        #endregion
 
+        #region Services
         private bool ServicePredicate(MailContext context)
         {
             return WordPredicate(context, new string[] { "service", "repair" });
@@ -65,7 +72,9 @@ namespace TestChainOfResp.Refactoring.Flow
         {
             Console.WriteLine("Email handled by service department");
         }
+        #endregion
 
+        #region General
         private bool GeneralPredicate(MailContext context)
         {
             return WordPredicate(context, new string[0]);
@@ -75,6 +84,7 @@ namespace TestChainOfResp.Refactoring.Flow
         {
             Console.WriteLine("Email handled by general enquiries");
         }
+        #endregion
 
         private bool WordPredicate(MailContext context, IEnumerable<string> matchingWords)
         {
