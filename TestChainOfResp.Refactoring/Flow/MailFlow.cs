@@ -48,7 +48,7 @@ namespace TestChainOfResp.Refactoring.Flow
         {
             Console.WriteLine("Email handled by sales department");
         }
-        #region Spam
+        #endregion
 
         #region Manager
         private bool ManagerPredicate(MailContext context)
